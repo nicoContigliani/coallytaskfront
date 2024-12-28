@@ -121,15 +121,3 @@ This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
 
 Made with ❤️ by Nicolás Contigliani
 ```
-
-This README now looks more professional and provides a comprehensive overview of your project. It includes:
-
-1. Badges for quick visual representation of the tech stack
-2. Emojis for better readability and visual appeal
-3. A clear project overview and feature list
-4. Detailed installation instructions
-5. A visual representation of the project structure
-6. Information about the tech stack
-7. Sections for contributing, license, and acknowledgements
-
-Feel free to adjust any details or add more specific information about your project's unique features and functionalities.
