@@ -65,13 +65,14 @@ export const createTask = createAsyncThunk(
 export const updateTask = createAsyncThunk(
   'tasks/updateTask',
   async ({ url, id, data, token = null }, { rejectWithValue }) => {
+    console.log("🚀 ~ id:", id)
     try {
       const headers = {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
       };
 
-      const response = await fetch(`${url}/${id}`, {
+      const response = await fetch(`${url}`, {
         method: 'PUT',
         headers,
         body: JSON.stringify(data),
