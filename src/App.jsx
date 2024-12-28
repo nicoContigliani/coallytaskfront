@@ -9,21 +9,24 @@ import ButtonComponent from './components/ButtonComponent/ButtonComponent';
 import { ToastContainer } from 'react-toastify';
 import List from './components/list/List';
 
-const url = `${procces.env.URL_BASE}`
 
 
 function App() {
+
+  const apiUrl = import.meta.env.VITE_API_URL;
+  console.log("🚀 ~ App ~ apiUrl:", apiUrl)
+
+
   const dispatch = useDispatch();
   const { tasks, loading, error } = useSelector((state) => state.tasks);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
   const [editTaskId, setEditTaskId] = useState(null);
 
-  console.log("🚀 ~ App ~ url:", url)
 
   // Memorizar la tarea de la API y evitar que se recalculen innecesariamente.
   const fetchTasksData = useCallback(() => {
     dispatch(fetchTasks({
-      url: 'http://localhost:5000/api/tasks',
+      url: apiUrl,
       method: 'GET',
       params: { search: 'example' },
       token: 'your-token-here',
@@ -38,7 +41,7 @@ function App() {
   const deleteTaks = useCallback((id) => {
     console.log("🚀 ~ deleteTaks ~ id:", id);
     dispatch(deleteTask({
-      url: `http://localhost:5000/api/tasks`,
+      url: apiUrl,
       method: 'DELETE',
       id: id,
       params: { search: 'example' },
@@ -50,16 +53,13 @@ function App() {
   const { filteredTasks, filter, setFilter } = useTaskFilter(tasks);
 
   const handleCheck = useCallback((id) => {
-    console.log("🚀 ~ handleCheck ~ id:", id);
     let task = tasks.find((task) => task.id === id);
-    console.log("🚀 ~ handleCheck ~ task:", task);
 
     if (task) {
       const updatedStatus = !task.completed;
-      console.log("🚀 ~ handleCheck ~ updatedStatus:", updatedStatus);
 
       dispatch(updateTask({
-        url: `http://localhost:5000/api/tasks/${id}`,
+        url: `${apiUrl}/${id}`,
         id: id,
         data: { completed: updatedStatus },
         token: 'your-token-here',

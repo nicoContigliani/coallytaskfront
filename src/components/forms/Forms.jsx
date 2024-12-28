@@ -8,6 +8,8 @@ import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { createTask, fetchTasks, updateTask } from '../../redux/tasksSlice';
 
 const Forms = ({ taskId,setEditTaskId }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const { 
     register, 
     handleSubmit, 
@@ -26,7 +28,7 @@ const Forms = ({ taskId,setEditTaskId }) => {
   useEffect(() => {
     if (taskId) {
       dispatch(fetchTasks({
-        url: 'http://localhost:5000/api/tasks',
+        url: apiUrl,
         method: 'GET',
         params: { id: taskId },
         token: 'your-token-here',
@@ -49,7 +51,7 @@ const Forms = ({ taskId,setEditTaskId }) => {
     try {
       if (taskId) {
         await dispatch(updateTask({
-          url: `http://localhost:5000/api/tasks/${taskId}`,
+          url: `${apiUrl}/${taskId}`,
           id: taskId,
           data: {
             title: data.title,
@@ -62,7 +64,7 @@ const Forms = ({ taskId,setEditTaskId }) => {
 
       } else {
         await dispatch(createTask({
-          url: 'http://localhost:5000/api/tasks',
+          url: apiUrl,
           method: 'POST',
           body: {
             title: data.title,
