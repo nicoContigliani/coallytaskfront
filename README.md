@@ -59,7 +59,7 @@ CoallyTaskFront is a cutting-edge React.js application built with the blazing-fa
    npm run dev
    ```
 
-   This will launch Vite's development server, opening your project in a browser window at `http://localhost:3000` by default.
+   This will launch Vite's development server, opening your project in a browser window at `http://localhost:5173/` by default.
 
 ## 📁 Project Structure
 

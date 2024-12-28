@@ -4,31 +4,35 @@ import InputsComponent from '../inputs/InputsComponents';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { createTask, fetchTasks, updateTask } from '../../redux/tasksSlice';
 import { useDispatch, useSelector } from 'react-redux';
-// Importamos el componente de botón
 
 const Forms = ({ taskId }) => {
-  const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm();
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors }, 
+    setValue, 
+    reset, 
+    watch 
+  } = useForm();
   const dispatch = useDispatch();
-  const [getTaskId, SetGetTaskId] = useState(null);
+  const [getTaskId, setGetTaskId] = useState(null);
 
   const { tasks } = useSelector(state => state.tasks);
-  const taskToEdit = tasks.find(task => task.id === taskId);  // Encuentra la tarea con el ID
+  const taskToEdit = tasks.find(task => task.id === taskId);
 
   useEffect(() => {
-    // Si hay un taskId, despacha la acción para obtener la tarea
     if (taskId) {
       dispatch(fetchTasks({
         url: 'http://localhost:5000/api/tasks',
         method: 'GET',
-        params: { id: taskId },  // Filtra por taskId
+        params: { id: taskId },
         token: 'your-token-here',
       }));
+      setGetTaskId(taskId);
     }
-    if (taskId) SetGetTaskId(taskId)
   }, [taskId, dispatch]);
 
   useEffect(() => {
-    // Si tenemos una tarea para editar, configuramos los valores en el formulario
     if (taskToEdit) {
       setValue('title', taskToEdit.title);
       setValue('description', taskToEdit.description);
@@ -38,9 +42,8 @@ const Forms = ({ taskId }) => {
 
   const onSubmit = (data) => {
     console.log("🚀 ~ onSubmit ~ data.title:", data.title);
-  
+
     if (taskId) {
-      // Si existe un taskId, actualizamos la tarea existente
       dispatch(updateTask({
         url: `http://localhost:5000/api/tasks/${getTaskId}`,
         id: getTaskId,
@@ -52,7 +55,6 @@ const Forms = ({ taskId }) => {
         token: 'your-token-here',
       }));
     } else {
-      // Si no existe taskId, creamos una nueva tarea
       dispatch(createTask({
         url: 'http://localhost:5000/api/tasks',
         method: 'POST',
@@ -64,6 +66,9 @@ const Forms = ({ taskId }) => {
         token: 'your-token-here',
       }));
     }
+
+    // Limpia el formulario después de enviarlo
+    reset();
   };
 
   return (
@@ -74,18 +79,16 @@ const Forms = ({ taskId }) => {
       <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">Formulario Compacto</h2>
 
       <div>
-        <div>
-          <label htmlFor="title" className="block text-gray-600 font-medium text-sm mb-1">Title</label>
-          <InputsComponent
-            id="title"
-            name="title"
-            type="text"
-            placeholder="Enter your title"
-            register={register}
-            error={errors.title}
-          />
-          {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
-        </div>
+        <label htmlFor="title" className="block text-gray-600 font-medium text-sm mb-1">Title</label>
+        <InputsComponent
+          id="title"
+          name="title"
+          type="text"
+          placeholder="Enter your title"
+          register={register}
+          error={errors.title}
+        />
+        {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
 
         <label htmlFor="description" className="block text-gray-600 font-medium text-sm mb-1">Description</label>
         <InputsComponent

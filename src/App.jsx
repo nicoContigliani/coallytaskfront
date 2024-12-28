@@ -5,6 +5,8 @@ import { deleteTask, fetchTasks, updateTask } from './redux/tasksSlice';
 import './App.css';
 import Forms from './components/forms/Forms';
 import { format } from 'date-fns'; // Importa format de date-fns
+import useTaskFilter from './hooks/useTaskFilter';
+import ButtonComponent from './components/ButtonComponent/ButtonComponent';
 
 
 
@@ -36,6 +38,7 @@ function App() {
   }
 
   const handleCheck = (id) => {
+    console.log("🚀 ~ handleCheck ~ id:", id)
     // Find the task by ID
     let task = tasks.find((task) => task.id === id);
     console.log("🚀 ~ handleCheck ~ task:", task)
@@ -61,6 +64,10 @@ function App() {
   };
 
 
+  const { filteredTasks, filter, setFilter } = useTaskFilter(tasks);
+  console.log("🚀 ~ App ~ filteredTasks:", filteredTasks)
+
+
 
   return (
     <div className="container mx-auto p-4">
@@ -68,10 +75,6 @@ function App() {
 
       {/* Main Wrapper: Flexbox */}
       <div className="flex flex-col sm:flex-row sm:space-x-6 mb-8">
-        {/* Forms Section */}
-        <div className="flex-1 mb-6 sm:mb-0">
-          <Forms taskId={editTaskId} />
-        </div>
 
         {/* Task List */}
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md flex-1">
@@ -81,10 +84,33 @@ function App() {
           {tasks.length === 0 && !loading && (
             <p className="text-center text-gray-500">No tasks available.</p>
           )}
+          <div className="filter-buttons">
+              <div className="flex space-x-2">
+                <ButtonComponent
+                  onClick={() => setFilter('all')}
+                  className={`btn ${filter === 'all' ? 'active' : ''}`}
+                >
+                  All
+                </ButtonComponent>
+                <ButtonComponent
+                  onClick={() => setFilter('completed')}
+                  className={`btn ${filter === 'completed' ? 'active' : ''}`}
+                >
+                  Completed
+                </ButtonComponent>
+                <ButtonComponent
+                  onClick={() => setFilter('pending')}
+                  className={`btn ${filter === 'pending' ? 'active' : ''}`}
+                >
+                  Pending
+                </ButtonComponent>
+              </div>
+            
+          </div>
 
           <ul className="space-y-4">
-            {tasks &&
-              tasks.map((task) => (
+            {filteredTasks &&
+              filteredTasks.map((task) => (
                 <li
                   key={task?.id}
                   className="flex flex-col sm:flex-row justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition duration-200 ease-in-out space-y-2 sm:space-y-0 sm:space-x-4"
@@ -105,8 +131,8 @@ function App() {
                     <div className="flex items-center text-sm text-gray-600">
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${task.completed
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-yellow-100 text-yellow-700'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-yellow-100 text-yellow-700'
                           }`}
                       >
                         {task.completed ? 'Completed' : 'Pending'}
@@ -135,6 +161,10 @@ function App() {
               ))}
           </ul>
         </div>
+        <div className="flex-1 mb-6 sm:mb-0">
+          <Forms taskId={editTaskId} />
+        </div>
+
       </div>
     </div>
   );
