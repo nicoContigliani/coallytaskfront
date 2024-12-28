@@ -1,6 +1,6 @@
 import React from 'react';
 
-const InputsComponent = ({ id, name, type, placeholder, register, error, checked }) => {
+const InputsComponent = ({ id, name, type, placeholder, register, error, checked,rules }) => {
   return (
     <div>
       <input
@@ -13,6 +13,7 @@ const InputsComponent = ({ id, name, type, placeholder, register, error, checked
         } border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
         {...register(name)} // Registrar input con react-hook-form
         defaultChecked={checked} // Establecer el estado inicial del checkbox
+        rules={rules}
       />
       {error && <span className="text-red-500">{error.message}</span>}
     </div>

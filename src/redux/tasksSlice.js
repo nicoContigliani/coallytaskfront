@@ -1,10 +1,11 @@
 // src/redux/tasksSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { showSnackbar } from '../services/snackbarService';
 
 // Fetch Tasks (Read)
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
-  async ({ url, method = 'GET', params = {}, token = null }, { rejectWithValue }) => {
+  async ({ url, method = 'GET', params = {}, token = null, message = "" }, { rejectWithValue }) => {
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -26,6 +27,8 @@ export const fetchTasks = createAsyncThunk(
       }
 
       const result = await response.json();
+      showSnackbar(message || 'Tareas cargadas exitosamente', 'success'); // Mostrar Snackbar después de éxito
+
       return result; // Este será el payload de la acción
     } catch (error) {
       return rejectWithValue(error.message);
@@ -36,7 +39,7 @@ export const fetchTasks = createAsyncThunk(
 // Create Task
 export const createTask = createAsyncThunk(
   'tasks/createTask',
-  async ({ url, body, token = null }, { rejectWithValue }) => {
+  async ({ url, body, token = null, message = "" }, { rejectWithValue }) => {
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -54,6 +57,8 @@ export const createTask = createAsyncThunk(
       }
 
       const result = await response.json();
+      showSnackbar(message || 'Tarea creada exitosamente', 'success');
+
       return result; // Retorna la nueva tarea creada
     } catch (error) {
       return rejectWithValue(error.message);
@@ -64,7 +69,7 @@ export const createTask = createAsyncThunk(
 // Update Task
 export const updateTask = createAsyncThunk(
   'tasks/updateTask',
-  async ({ url, id, data, token = null }, { rejectWithValue }) => {
+  async ({ url, id, data, token = null, message = "" }, { rejectWithValue }) => {
     console.log("🚀 ~ id:", id)
     try {
       const headers = {
@@ -84,6 +89,8 @@ export const updateTask = createAsyncThunk(
       }
 
       const result = await response.json();
+      showSnackbar(message || 'Tarea actualizada exitosamente', 'success');
+
       return result; // Retorna la tarea actualizada
     } catch (error) {
       return rejectWithValue(error.message);
@@ -94,7 +101,7 @@ export const updateTask = createAsyncThunk(
 // Delete Task
 export const deleteTask = createAsyncThunk(
   'tasks/deleteTask',
-  async ({ url, id, token = null }, { rejectWithValue }) => {
+  async ({ url, id, token = null, message = "" }, { rejectWithValue }) => {
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -109,8 +116,11 @@ export const deleteTask = createAsyncThunk(
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
+      showSnackbar(message || 'Tarea eliminada exitosamente', 'success');
 
+      showSnackbar(message || 'Tarea actualizada exitosamente', 'success');
       return id; // Retorna el ID de la tarea eliminada
+
     } catch (error) {
       return rejectWithValue(error.message);
     }

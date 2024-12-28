@@ -1,21 +1,24 @@
+'use client'
+
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import InputsComponent from '../inputs/InputsComponents';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { createTask, fetchTasks, updateTask } from '../../redux/tasksSlice';
-import { useDispatch, useSelector } from 'react-redux';
 
-const Forms = ({ taskId }) => {
+const Forms = ({ taskId,setEditTaskId }) => {
   const { 
     register, 
     handleSubmit, 
     formState: { errors }, 
     setValue, 
-    reset, 
+    reset,
     watch 
   } = useForm();
   const dispatch = useDispatch();
-  const [getTaskId, setGetTaskId] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const { tasks } = useSelector(state => state.tasks);
   const taskToEdit = tasks.find(task => task.id === taskId);
@@ -28,7 +31,6 @@ const Forms = ({ taskId }) => {
         params: { id: taskId },
         token: 'your-token-here',
       }));
-      setGetTaskId(taskId);
     }
   }, [taskId, dispatch]);
 
@@ -37,46 +39,65 @@ const Forms = ({ taskId }) => {
       setValue('title', taskToEdit.title);
       setValue('description', taskToEdit.description);
       setValue('completed', taskToEdit.completed);
-    }
-  }, [taskToEdit, setValue]);
-
-  const onSubmit = (data) => {
-    console.log("🚀 ~ onSubmit ~ data.title:", data.title);
-
-    if (taskId) {
-      dispatch(updateTask({
-        url: `http://localhost:5000/api/tasks/${getTaskId}`,
-        id: getTaskId,
-        data: {
-          title: data.title,
-          description: data.description,
-          completed: data.completed || false,
-        },
-        token: 'your-token-here',
-      }));
     } else {
-      dispatch(createTask({
-        url: 'http://localhost:5000/api/tasks',
-        method: 'POST',
-        body: {
-          title: data.title,
-          description: data.description,
-          completed: data.completed || false,
-        },
-        token: 'your-token-here',
-      }));
+      reset(); // Clear form when there's no task to edit
     }
+  }, [taskToEdit, setValue, reset]);
 
-    // Limpia el formulario después de enviarlo
-    reset();
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    try {
+      if (taskId) {
+        await dispatch(updateTask({
+          url: `http://localhost:5000/api/tasks/${taskId}`,
+          id: taskId,
+          data: {
+            title: data.title,
+            description: data.description,
+            completed: data.completed || false,
+          },
+          token: 'your-token-here',
+        }));
+        setEditTaskId(null);
+
+      } else {
+        await dispatch(createTask({
+          url: 'http://localhost:5000/api/tasks',
+          method: 'POST',
+          body: {
+            title: data.title,
+            description: data.description,
+            completed: data.completed || false,
+          },
+          token: 'your-token-here',
+        }));
+      }
+      
+      reset(); // Clear the form after successful submission
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+      setEditTaskId(null);
+    }
   };
+  
+    
+
+
+
+
+  // Check if title and description are filled
+  const isFormValid = watch('title') && watch('description');
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-sm mx-auto p-4 bg-white rounded-lg shadow-md space-y-3"
     >
-      <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">Formulario Compacto</h2>
+      <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">
+        {taskId ? 'Edit Task' : 'Create New Task'}
+      </h2>
 
       <div>
         <label htmlFor="title" className="block text-gray-600 font-medium text-sm mb-1">Title</label>
@@ -87,6 +108,7 @@ const Forms = ({ taskId }) => {
           placeholder="Enter your title"
           register={register}
           error={errors.title}
+          rules={{ required: 'Title is required' }}
         />
         {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
 
@@ -98,6 +120,7 @@ const Forms = ({ taskId }) => {
           placeholder="Enter your description"
           register={register}
           error={errors.description}
+          rules={{ required: 'Description is required' }}
         />
         {errors.description && <span className="text-red-500 text-sm">{errors.description.message}</span>}
 
@@ -113,8 +136,8 @@ const Forms = ({ taskId }) => {
       </div>
 
       <div className="text-center">
-        <ButtonComponent action={taskId ? 'update' : 'create'}>
-          {taskId ? 'Update' : 'Submit'}
+        <ButtonComponent action={taskId ? 'update' : 'create'} disabled={isSubmitting || !isFormValid}>
+          {isSubmitting ? 'Submitting...' : (taskId ? 'Update' : 'Submit')}
         </ButtonComponent>
       </div>
     </form>
