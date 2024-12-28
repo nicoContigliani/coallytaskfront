@@ -70,7 +70,6 @@ export const createTask = createAsyncThunk(
 export const updateTask = createAsyncThunk(
   'tasks/updateTask',
   async ({ url, id, data, token = null, message = "" }, { rejectWithValue }) => {
-    console.log("🚀 ~ id:", id)
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -82,7 +81,6 @@ export const updateTask = createAsyncThunk(
         headers,
         body: JSON.stringify(data),
       });
-      console.log("🚀 ~ response:", response)
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);

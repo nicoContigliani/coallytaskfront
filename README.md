@@ -52,8 +52,13 @@ CoallyTaskFront is a cutting-edge React.js application built with the blazing-fa
    ```bash
    npm install
    ```
+4. **Create and Add .env**
+```
+VITE_API_URL=********************************
 
-4. **Start the Development Server:**
+```
+
+5. **Start the Development Server:**
 
    ```bash
    npm run dev

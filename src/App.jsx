@@ -14,7 +14,6 @@ import List from './components/list/List';
 function App() {
 
   const apiUrl = import.meta.env.VITE_API_URL;
-  console.log("🚀 ~ App ~ apiUrl:", apiUrl)
 
 
   const dispatch = useDispatch();
@@ -39,7 +38,6 @@ function App() {
 
   // Función de eliminación optimizada con useCallback.
   const deleteTaks = useCallback((id) => {
-    console.log("🚀 ~ deleteTaks ~ id:", id);
     dispatch(deleteTask({
       url: apiUrl,
       method: 'DELETE',
