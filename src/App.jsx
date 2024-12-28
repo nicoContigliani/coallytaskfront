@@ -1,9 +1,12 @@
 // src/App.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTasks } from './redux/tasksSlice';
+import { deleteTask, fetchTasks, updateTask } from './redux/tasksSlice';
 import './App.css';
 import Forms from './components/forms/Forms';
+import { format } from 'date-fns'; // Importa format de date-fns
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -18,6 +21,42 @@ function App() {
       token: 'your-token-here',
     }));
   }, [dispatch]);
+
+  const deleteTaks = (id) => {
+    console.log("🚀 ~ deleteTaks ~ id:", id); // Check if ID is valid
+    dispatch(deleteTask({
+      url: `http://localhost:5000/api/tasks`,
+      method: 'DELETE',
+      id: id,
+      params: { search: 'example' },
+      token: 'your-token-here',
+    }));
+  }
+
+  const handleCheck = (id) => {
+    // Find the task by ID
+    let  task = tasks.find((task) => task.id === id);
+    console.log("🚀 ~ handleCheck ~ task:", task)
+
+
+    if (task) {
+      // Toggle the completed state
+      const updatedStatus = !task.completed;
+
+      console.log("🚀 ~ handleCheck ~ updatedStatus:", updatedStatus);
+
+      // Dispatch the updateTask action to update the task status
+      dispatch(updateTask({
+        url: 'http://localhost:5000/api/tasks', // Your API endpoint for updating tasks
+        id: id,
+        data: { completed: updatedStatus }, // Update with the new completed status
+        token: 'your-token-here', // Token if needed
+      }));
+    }
+  };
+
+
+
 
   return (
     <div className="container mx-auto p-4">
@@ -39,27 +78,38 @@ function App() {
         )}
 
         <ul className="space-y-4">
-          {tasks.map((task) => (
-            <li
-              key={task.id}
-              className="flex flex-col sm:flex-row justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition duration-200 ease-in-out space-y-2 sm:space-y-0 sm:space-x-4"
-            >
-              {/* Task Title */}
-              <span className="text-gray-800 font-medium text-sm sm:text-base break-words flex-1 text-center sm:text-left">
-                {task.title}
-              </span>
+          {
+            tasks && tasks.map((task) => (
+              <li
+                key={task?.id}
+                className="flex flex-col sm:flex-row justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition duration-200 ease-in-out space-y-2 sm:space-y-0 sm:space-x-4"
+              >
+                {/* Checkbox for task completion */}
+                <input
+                  type="checkbox"
+                  checked={task?.completed} // Use task.completed to set the checked state
+                  onChange={() => handleCheck(task?.id)} // Trigger handleCheck on change
+                  className="h-4 w-4 sm:h-5 sm:w-5 rounded text-blue-500 focus:ring-blue-400 transition duration-300 ease-in-out"
+                />
 
-              {/* Action Buttons */}
-              <div className="flex justify-center items-center space-x-2">
-                <button className="bg-blue-500 text-white px-3 py-1 text-xs sm:text-sm rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 ease-in-out">
-                  Edit
-                </button>
-                <button className="bg-red-500 text-white px-3 py-1 text-xs sm:text-sm rounded shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-300 ease-in-out">
-                  Delete
-                </button>
-              </div>
-            </li>
-          ))}
+                {/* Task Title */}
+                <span className="text-gray-800 font-medium text-sm sm:text-base break-words flex-1 text-center sm:text-left">
+                  {task?.title} - {task.completed ? 'Completed' : 'Pending'} - {format(new Date(task.createdAt), 'MM/dd/yyyy hh:mm a')}
+                </span>
+
+                {/* Action Buttons */}
+                <div className="flex justify-center items-center space-x-2">
+                  <button className="bg-blue-500 text-white px-3 py-1 text-xs sm:text-sm rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 ease-in-out">
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteTaks(task?.id)}
+                    className="bg-red-500 text-white px-3 py-1 text-xs sm:text-sm rounded shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-300 ease-in-out">
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
         </ul>
       </div>
     </div>
