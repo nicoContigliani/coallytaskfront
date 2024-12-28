@@ -46,36 +46,36 @@ This will launch Vite's development server, opening your project in a browser wi
 ** Project Structure:**
 
 coallytaskfront/
-├── eslint.config.js        // ESLint configuration for code linting
-├── index.html              // Main HTML entry point
-├── package.json             // Project dependencies and scripts
-├── package-lock.json        // Dependency lock file
-├── postcss.config.cjs       // PostCSS configuration
-├── public/
-│   └── vite.svg             // Vite logo for development server
-├── README.md               // This file (project documentation)
-├── src/
-│   ├── App.css               // Global CSS styles for the application
-│   ├── App.jsx               // Main React component
-│   ├── assets/
-│   │   └── react.svg          // React logo (optional)
-│   ├── components/
-│   │   ├── ButtonComponent/
-│   │   │   └── ButtonComponent.jsx // Component for button elements
-│   │   ├── forms/
-│   │   │   ├── forms.css        // CSS styles for forms
-│   │   │   └── Forms.jsx        // Component for forms
-│   │   └── inputs/
-│   │       └── InputsComponents.jsx // Component for various input elements
-│   ├── hooks/
-│   │   └── useFectch.js        // Custom hook for fetching data (replace with correct spelling)
-│   ├── index.css              // Additional CSS styles for the application
-│   ├── main.jsx               // Entry point for the React application
-│   ├── redux/
-│   │   ├── store.js            // Redux store configuration
-│   │   └── tasksSlice.js       // Redux slice for managing tasks (replace with actual name)
-│   ├── services/
-│   │   └── fetchService.js     // Service for making API requests
-│   └── utils/                // Utility functions
-├── tailwind.config.js      // Tailwind CSS configuration (optional)
-└── vite.config.js          // Vite configuration file
+├── **eslint.config.js**  // Enforces code style and quality (linter)
+├── **index.html**         // Main entry point for the application
+├── **package.json**       // Project dependencies and scripts
+├── **package-lock.json**  // Dependency lock file
+├── **postcss.config.cjs**  // Configuration for PostCSS (optional)
+├── **public/**
+│   └── **vite.svg**        // Vite logo for development server
+├── **README.md**          // This file (project documentation)
+├── **src/**               // Source code for your React application
+│   ├── **App.css**          // Global CSS styles
+│   ├── **App.jsx**          // Main React component
+│   ├── **assets/**          // Optional assets like logos
+│   │   └── **react.svg**    // Optional React logo
+│   ├── **components/**     // Reusable UI components
+│   │   ├── **ButtonComponent/**
+│   │   │   └── **ButtonComponent.jsx**
+│   │   ├── **forms/**
+│   │   │   ├── **forms.css**         // CSS styles for forms
+│   │   │   └── **Forms.jsx**         // Component for forms
+│   │   └── **inputs/**
+│   │       └── **InputsComponents.jsx** // Component for various input elements
+│   ├── **hooks/**           // Custom hooks for logic reusability
+│   │   └── **useFetch.js**          // Corrected spelling - for fetching data
+│   ├── **index.css**         // Additional CSS styles for the application
+│   ├── **main.jsx**          // Entry point for React application
+│   ├── **redux/**           // Redux state management (optional)
+│   │   ├── **store.js**        // Redux store configuration
+│   │   └── **tasksSlice.js**    // Redux slice for managing tasks (replace with actual name)
+│   ├── **services/**        // Services for handling API requests
+│   │   └── **fetchService.js**   // Service for making API requests
+│   └── **utils/**           // Utility functions for common tasks
+├── **tailwind.config.js**  // Configuration for Tailwind CSS (optional)
+└── **vite.config.js**       // Vite configuration file for build settings
