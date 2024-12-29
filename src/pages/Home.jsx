@@ -16,7 +16,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { tasks, loading, error } = useSelector((state) => state.tasks);
+  const { tasks, loading, error } = useSelector((state) => state?.tasks);
   const [editTaskId, setEditTaskId] = useState(null);
 
   const fetchTasksData = useCallback(() => {
@@ -71,7 +71,7 @@ const Home = () => {
       <div className="flex flex-col sm:flex-row sm:space-x-6 mb-8">
         <div className="bg-white p-4 rounded-lg shadow-md flex-1">
           {loading && <p className="text-center">Loading...</p>}
-          {error && <p className="text-center text-red-500">Error: {error}</p>}
+          {error && <p className="text-center text-#ff00004d-500">Error: {error}</p>}
           <ToastContainer />
           <div className="filter-buttons flex gap-4 justify-center my-4">
             <ButtonComponent

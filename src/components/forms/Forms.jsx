@@ -109,7 +109,7 @@ const Forms = ({ taskId,setEditTaskId }) => {
           error={errors.title}
           rules={{ required: 'Title is required' }}
         />
-        {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
+        {errors?.title && <span className="text-red-500 text-sm">{errors?.title?.message}</span>}
 
         <label htmlFor="description" className="block text-gray-600 font-medium text-sm mb-1">Description</label>
         <InputsComponent
@@ -121,7 +121,7 @@ const Forms = ({ taskId,setEditTaskId }) => {
           error={errors.description}
           rules={{ required: 'Description is required' }}
         />
-        {errors.description && <span className="text-red-500 text-sm">{errors.description.message}</span>}
+        {errors?.description && <span className="text-red-500 text-sm">{errors?.description.message}</span>}
 
         <label htmlFor="completed" className="block text-gray-600 font-medium text-sm mb-1">Completed</label>
         <InputsComponent
