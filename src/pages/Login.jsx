@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getToken, saveToken } from '../services/tokenSerice';
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -9,7 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
 
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (getToken()) {
       navigate('/home');
     }
