@@ -7,7 +7,7 @@
 
 ## 🚀 Project Deploy 
 
-Front: https://coallytaskfront.netlify.app/login
+Front: https://coallytaskfront.netlify.app
 Api: https://coallytaskback.up.railway.app
 
 
