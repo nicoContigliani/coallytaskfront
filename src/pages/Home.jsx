@@ -6,8 +6,9 @@ import ButtonComponent from '../components/ButtonComponent/ButtonComponent';
 import List from '../components/list/List';
 import { ToastContainer } from 'react-toastify';
 import useTaskFilter from '../hooks/useTaskFilter';
-import { getToken, removeToken } from '../services/tokenSerice';
+import { getToken, removeToken } from '../services/tokenService';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../redux/authSlice';
 
 const Home = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -60,8 +61,8 @@ const Home = () => {
   }, []);
 
   const handleLogout = () => {
-    removeToken(); // Elimina el token del almacenamiento
-    navigate('/login'); // Redirige al login
+    dispatch(logout());
+    navigate('/login');
   };
 
   return (
@@ -76,8 +77,8 @@ const Home = () => {
             <ButtonComponent
               onClick={() => setFilter('all')}
               className={`px-4 py-2 rounded-lg transition-all duration-300 shadow-sm ${filter === 'all'
-                  ? 'bg-blue-500 text-white shadow-md hover:bg-blue-600'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? 'bg-blue-500 text-white shadow-md hover:bg-blue-600'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
             >
               All
@@ -85,8 +86,8 @@ const Home = () => {
             <ButtonComponent
               onClick={() => setFilter('completed')}
               className={`px-4 py-2 rounded-lg transition-all duration-300 shadow-sm ${filter === 'completed'
-                  ? 'bg-green-500 text-white shadow-md hover:bg-green-600'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? 'bg-green-500 text-white shadow-md hover:bg-green-600'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
             >
               Completed
@@ -94,16 +95,16 @@ const Home = () => {
             <ButtonComponent
               onClick={() => setFilter('pending')}
               className={`px-4 py-2 rounded-lg transition-all duration-300 shadow-sm ${filter === 'pending'
-                  ? 'bg-yellow-500 text-white shadow-md hover:bg-yellow-600'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? 'bg-yellow-500 text-white shadow-md hover:bg-yellow-600'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
             >
               Pending
             </ButtonComponent>
           </div>
           <ul className="space-y-4">
-            {filteredTasks.map((task) => (
-              <List key={task.id} task={task} handleCheck={handleCheck} handleEdit={handleEdit} deleteTaks={deleteTaks} />
+            {filteredTasks && filteredTasks.map((task) => (
+              task && <List key={task.id} task={task} handleCheck={handleCheck} handleEdit={handleEdit} deleteTaks={deleteTaks} />
             ))}
           </ul>
         </div>

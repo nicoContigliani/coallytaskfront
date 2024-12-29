@@ -1,12 +1,16 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getToken, saveToken } from '../services/tokenSerice';
+import { getToken, saveToken } from '../services/tokenService';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/authSlice';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
 
 
   useLayoutEffect(() => {
@@ -34,7 +38,7 @@ const Login = () => {
       const data = await response.json();
 
       if (data?.token) {
-        saveToken(data.token);
+        dispatch(login({ token: data.token, user: data.user })); // Despacha login
         navigate('/home');
       } else {
         alert('No se pudo obtener el token. Verifica el servidor.');

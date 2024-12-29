@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import InputsComponent from '../inputs/InputsComponents';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { createTask, fetchTasks, updateTask } from '../../redux/tasksSlice';
-import { getToken } from '../../services/tokenSerice';
+import { getToken } from '../../services/tokenService';
 
 const Forms = ({ taskId,setEditTaskId }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
