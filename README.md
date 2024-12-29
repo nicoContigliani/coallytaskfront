@@ -4,6 +4,12 @@
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
+
+## 🚀 Project Deploy 
+
+https://coallytaskfront.netlify.app/login
+
+
 ## 🚀 Project Overview
 
 CoallyTaskFront is a cutting-edge React.js application built with the blazing-fast Vite development server. This project empowers you to manage tasks and streamline your workflow with an intuitive and user-friendly interface.
