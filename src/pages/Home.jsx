@@ -6,11 +6,13 @@ import ButtonComponent from '../components/ButtonComponent/ButtonComponent';
 import List from '../components/list/List';
 import { ToastContainer } from 'react-toastify';
 import useTaskFilter from '../hooks/useTaskFilter';
-import { getToken } from '../services/tokenSerice';
+import { getToken, removeToken } from '../services/tokenSerice';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = getToken()
+  const token = getToken();
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { tasks, loading, error } = useSelector((state) => state.tasks);
@@ -56,6 +58,11 @@ const Home = () => {
   const handleEdit = useCallback((id) => {
     setEditTaskId(id);
   }, []);
+
+  const handleLogout = () => {
+    removeToken(); // Elimina el token del almacenamiento
+    navigate('/login'); // Redirige al login
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -103,7 +110,14 @@ const Home = () => {
         <div className="flex-1">
           <Forms taskId={editTaskId} setEditTaskId={setEditTaskId} />
         </div>
-        hola
+      </div>
+      <div className="flex justify-end mt-4">
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-all duration-300"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

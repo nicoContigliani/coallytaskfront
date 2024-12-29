@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getToken, saveToken } from '../services/tokenSerice';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
- 
 
- useEffect(() => {
+
+  useEffect(() => {
     if (getToken()) {
       navigate('/home');
     }
   }, [])
 
-
-
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/', {
+      const response = await fetch(`${apiUrl}/api/auth/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

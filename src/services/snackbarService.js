@@ -9,6 +9,6 @@ export const showSnackbar = (message, type = 'info') => {
         toast.error(message);
         break;
       default:
-        toast(message); // Toast info o default
+        toast(message); 
     }
   };

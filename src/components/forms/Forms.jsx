@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import InputsComponent from '../inputs/InputsComponents';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { createTask, fetchTasks, updateTask } from '../../redux/tasksSlice';
+import { getToken } from '../../services/tokenSerice';
 
 const Forms = ({ taskId,setEditTaskId }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -31,7 +32,7 @@ const Forms = ({ taskId,setEditTaskId }) => {
         url: apiUrl,
         method: 'GET',
         params: { id: taskId },
-        token: 'your-token-here',
+        token: getToken(),
       }));
     }
   }, [taskId, dispatch]);
@@ -51,31 +52,31 @@ const Forms = ({ taskId,setEditTaskId }) => {
     try {
       if (taskId) {
         await dispatch(updateTask({
-          url: `${apiUrl}/${taskId}`,
+          url: `${apiUrl}/api/tasks/${taskId}`,
           id: taskId,
           data: {
             title: data.title,
             description: data.description,
             completed: data.completed || false,
           },
-          token: 'your-token-here',
+          token: getToken(),
         }));
         setEditTaskId(null);
 
       } else {
         await dispatch(createTask({
-          url: apiUrl,
+          url: `${apiUrl}/api/tasks`,
           method: 'POST',
           body: {
             title: data.title,
             description: data.description,
             completed: data.completed || false,
           },
-          token: 'your-token-here',
+          token: getToken(),
         }));
       }
       
-      reset(); // Clear the form after successful submission
+      reset();
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
@@ -85,10 +86,6 @@ const Forms = ({ taskId,setEditTaskId }) => {
   };
   
     
-
-
-
-
   // Check if title and description are filled
   const isFormValid = watch('title') && watch('description');
 

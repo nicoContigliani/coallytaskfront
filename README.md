@@ -8,6 +8,15 @@
 
 CoallyTaskFront is a cutting-edge React.js application built with the blazing-fast Vite development server. This project empowers you to manage tasks and streamline your workflow with an intuitive and user-friendly interface.
 
+### 🔐 Authentication
+
+The application features a static login system for demonstration purposes:
+- **Default Credentials**:
+  - Username: `admin`
+  - Password: `admin`
+- **JWT Authentication**: Tokens are generated at `http://{domain}/api/auth/`
+- **Token Usage**: The generated JWT is required for all API endpoints
+
 ### 👨‍💻 Creator
 
 **Nicolás Contigliani** - Full-Stack Developer  
@@ -20,6 +29,8 @@ CoallyTaskFront is a cutting-edge React.js application built with the blazing-fa
 ## ✨ Features
 
 - **Efficient Task Management**: Prioritize and accomplish tasks with ease
+- **JWT Authentication**: Secure API access with JSON Web Tokens
+- **Redux Integration**: State management with Redux Toolkit and Redux DevTools
 - **Elegant UI**: Experience a modern and user-friendly interface that enhances productivity
 - **Lightning-Fast Performance**: Benefit from Vite's rapid development cycle and optimized builds
 - **Responsive Design**: Seamlessly manage tasks across all devices
@@ -52,11 +63,15 @@ CoallyTaskFront is a cutting-edge React.js application built with the blazing-fa
    ```bash
    npm install
    ```
-4. **Create and Add .env**
-```
-VITE_API_URL=********************************
 
-```
+4. **Create and Configure Environment Variables:**
+
+   Create a `.env` file in the root directory:
+   ```
+   VITE_API_URL=your_api_url_here
+   SECRET_KEY_JWT=ASJ
+
+   ```
 
 5. **Start the Development Server:**
 
@@ -70,42 +85,60 @@ VITE_API_URL=********************************
 
 ```
 coallytaskfront/
-├── .eslintrc.js            # ESLint configuration
-├── index.html              # Main entry point for the application
-├── package.json            # Project dependencies and scripts
-├── postcss.config.cjs      # PostCSS configuration
-├── public/                 # Static assets
-│   └── vite.svg            # Vite logo
-├── README.md               # Project documentation (you are here)
-├── src/                    # Source code
-│   ├── App.css             # Global CSS styles
-│   ├── App.jsx             # Main React component
-│   ├── assets/             # Application assets
-│   ├── components/         # Reusable UI components
+├── eslint.config.js          # ESLint configuration
+├── index.html                # Main entry point
+├── package.json              # Project dependencies and scripts
+├── postcss.config.cjs        # PostCSS configuration
+├── public/                   # Static assets
+│   └── vite.svg
+├── src/
+│   ├── App.css              # Global CSS styles
+│   ├── App.jsx              # Main React component
+│   ├── assets/              # Application assets
+│   │   └── react.svg
+│   ├── components/          # Reusable UI components
 │   │   ├── ButtonComponent/
+│   │   │   └── ButtonComponent.jsx
 │   │   ├── forms/
-│   │   └── inputs/
-│   ├── hooks/              # Custom React hooks
-│   │   └── useFetch.js     # Hook for data fetching
-│   ├── index.css           # Additional global styles
-│   ├── main.jsx            # React application entry point
-│   ├── redux/              # Redux state management
+│   │   │   ├── forms.css
+│   │   │   └── Forms.jsx
+│   │   ├── inputs/
+│   │   │   └── InputsComponents.jsx
+│   │   └── list/
+│   │       └── List.jsx
+│   ├── hooks/               # Custom React hooks
+│   │   └── useTaskFilter.js
+│   ├── pages/               # Application pages
+│   │   ├── Home.jsx
+│   │   └── Login.jsx
+│   ├── redux/               # Redux state management
 │   │   ├── store.js
 │   │   └── tasksSlice.js
-│   ├── services/           # API and external services
-│   │   └── fetchService.js
-│   └── utils/              # Utility functions
-├── tailwind.config.js      # Tailwind CSS configuration
-└── vite.config.js          # Vite configuration
+│   ├── services/            # API and utility services
+│   │   ├── fetchService.js
+│   │   ├── snackbarService.js
+│   │   └── tokenSerice.js
+│   └── utils/               # Utility functions
+├── tailwind.config.js       # Tailwind CSS configuration
+└── vite.config.js           # Vite configuration
 ```
 
 ## 🧰 Tech Stack
 
 - **React**: A JavaScript library for building user interfaces
 - **Vite**: Next-generation frontend tooling
-- **Redux**: A predictable state container for JavaScript apps
+- **Redux Toolkit**: State management with Redux DevTools integration
+- **JWT**: JSON Web Token authentication
 - **Tailwind CSS**: A utility-first CSS framework
 - **ESLint**: Tool for identifying and reporting on patterns in JavaScript
+
+## 🔒 Authentication Flow
+
+1. User logs in with static credentials (admin/admin)
+2. Backend generates JWT token at `/api/auth/`
+3. Token is stored and managed by `tokenService.js`
+4. All subsequent API requests include the JWT in headers
+5. Redux manages authentication state
 
 ## 🤝 Contributing
 
@@ -121,8 +154,8 @@ This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
 - [React](https://reactjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Redux](https://redux.js.org/)
+- [JWT](https://jwt.io/)
 
 ---
 
 Made with ❤️ by Nicolás Contigliani
-```

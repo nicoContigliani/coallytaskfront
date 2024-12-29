@@ -27,7 +27,7 @@ export const fetchTasks = createAsyncThunk(
       }
 
       const result = await response.json();
-      showSnackbar(message || 'Tareas cargadas exitosamente', 'success'); // Mostrar Snackbar después de éxito
+      showSnackbar(message || 'Success, The tasks were fetched', 'success'); // Mostrar Snackbar después de éxito
 
       return result; // Este será el payload de la acción
     } catch (error) {
@@ -57,7 +57,7 @@ export const createTask = createAsyncThunk(
       }
 
       const result = await response.json();
-      showSnackbar(message || 'Tarea creada exitosamente', 'success');
+      showSnackbar(message || 'Task created successfully', 'success');
 
       return result; // Retorna la nueva tarea creada
     } catch (error) {
@@ -87,7 +87,7 @@ export const updateTask = createAsyncThunk(
       }
 
       const result = await response.json();
-      showSnackbar(message || 'Tarea actualizada exitosamente', 'success');
+      showSnackbar(message || 'Task updated successfully', 'success');
 
       return result; // Retorna la tarea actualizada
     } catch (error) {
@@ -114,9 +114,8 @@ export const deleteTask = createAsyncThunk(
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-      showSnackbar(message || 'Tarea eliminada exitosamente', 'success');
+      showSnackbar(message || 'Task deleted successfully', 'success');
 
-      showSnackbar(message || 'Tarea actualizada exitosamente', 'success');
       return id; // Retorna el ID de la tarea eliminada
 
     } catch (error) {
@@ -154,7 +153,7 @@ const tasksSlice = createSlice({
       })
       .addCase(createTask.fulfilled, (state, action) => {
         state.loading = false;
-        state.tasks.push(action.payload); // Agrega la nueva tarea
+        state.tasks.push(action.payload); 
       })
       .addCase(createTask.rejected, (state, action) => {
         state.loading = false;
@@ -169,7 +168,7 @@ const tasksSlice = createSlice({
         state.loading = false;
         const index = state.tasks.findIndex((task) => task.id === action.payload.id);
         if (index !== -1) {
-          state.tasks[index] = action.payload; // Actualiza la tarea en el estado
+          state.tasks[index] = action.payload; 
         }
       })
       .addCase(updateTask.rejected, (state, action) => {
@@ -183,7 +182,7 @@ const tasksSlice = createSlice({
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.loading = false;
-        state.tasks = state.tasks.filter((task) => task.id !== action.payload); // Elimina la tarea por ID
+        state.tasks = state.tasks.filter((task) => task.id !== action.payload); 
       })
       .addCase(deleteTask.rejected, (state, action) => {
         state.loading = false;
