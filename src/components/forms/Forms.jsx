@@ -43,7 +43,7 @@ const Forms = ({ taskId,setEditTaskId }) => {
       setValue('description', taskToEdit.description);
       setValue('completed', taskToEdit.completed);
     } else {
-      reset(); 
+      reset(); // Clear form when there's no task to edit
     }
   }, [taskToEdit, setValue, reset]);
 
@@ -86,59 +86,57 @@ const Forms = ({ taskId,setEditTaskId }) => {
   };
   
     
+  // Check if title and description are filled
   const isFormValid = watch('title') && watch('description');
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="max-w-sm mx-auto p-4 bg-white rounded-lg shadow-md space-y-3"
+    <form onSubmit={handleSubmit(onSubmit)} className="p-6 bg-gray-50 rounded-lg shadow-md space-y-4 max-w-md mx-auto">
+    <h2 className="text-lg font-bold text-gray-800 text-center">
+      {taskId ? 'Edit Task' : 'Create Task'}
+    </h2>
+
+    <InputsComponent
+      id="title"
+      name="title"
+      type="text"
+      placeholder="Enter Title"
+      register={register}
+      error={errors.title}
+      rules={{ required: 'Title is required' }}
+    />
+    {errors.title && <p className="text-sm text-red-500">{errors.title.message}</p>}
+
+    <InputsComponent
+      id="description"
+      name="description"
+      type="text"
+      placeholder="Enter Description"
+      register={register}
+      error={errors.description}
+      rules={{ required: 'Description is required' }}
+    />
+    {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
+
+    <div className="flex items-center gap-2">
+      <input
+        id="completed"
+        type="checkbox"
+        {...register('completed')}
+        className="h-4 w-4 text-blue-600 focus:ring focus:ring-blue-500 rounded"
+      />
+      <label htmlFor="completed" className="text-sm text-gray-700">
+        Mark as Completed
+      </label>
+    </div>
+
+    <ButtonComponent
+      action={taskId ? 'Update' : 'Create'}
+      disabled={isSubmitting || !watch('title') || !watch('description')}
+      className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
     >
-      <h2 className="text-xl font-semibold text-center text-gray-700 mb-4">
-        {taskId ? 'Edit Task' : 'Create New Task'}
-      </h2>
-
-      <div>
-        <label htmlFor="title" className="block text-gray-600 font-medium text-sm mb-1">Title</label>
-        <InputsComponent
-          id="title"
-          name="title"
-          type="text"
-          placeholder="Enter your title"
-          register={register}
-          error={errors.title}
-          rules={{ required: 'Title is required' }}
-        />
-        {errors?.title && <span className="text-red-500 text-sm">{errors?.title?.message}</span>}
-
-        <label htmlFor="description" className="block text-gray-600 font-medium text-sm mb-1">Description</label>
-        <InputsComponent
-          id="description"
-          name="description"
-          type="text"
-          placeholder="Enter your description"
-          register={register}
-          error={errors.description}
-          rules={{ required: 'Description is required' }}
-        />
-        {errors?.description && <span className="text-red-500 text-sm">{errors?.description.message}</span>}
-
-        <label htmlFor="completed" className="block text-gray-600 font-medium text-sm mb-1">Completed</label>
-        <InputsComponent
-          id="completed"
-          name="completed"
-          type="checkbox"
-          register={register}
-          error={errors.completed}
-        />
-        {errors.completed && <span className="text-red-500 text-sm">{errors.completed.message}</span>}
-      </div>
-
-      <div className="text-center">
-        <ButtonComponent action={taskId ? 'update' : 'create'} disabled={isSubmitting || !isFormValid}>
-          {isSubmitting ? 'Submitting...' : (taskId ? 'Update' : 'Submit')}
-        </ButtonComponent>
-      </div>
-    </form>
+      {isSubmitting ? 'Submitting...' : taskId ? 'Update Task' : 'Create Task'}
+    </ButtonComponent>
+  </form>
   );
 };
 

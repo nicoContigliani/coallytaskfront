@@ -21,12 +21,8 @@ const ButtonFilter = () => {
         }));
     }, [dispatch, apiUrl, token]);
 
-
-
     return (
         <div className="flex gap-4 justify-center my-4">
-
-            
             <ButtonComponent
                 onClick={() => fetchTasksDataTodo('')}
                 className="px-4 py-2 rounded bg-blue-500 text-white"

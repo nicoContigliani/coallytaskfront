@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Audio, ThreeDots } from 'react-loader-spinner'
 import { deleteTask, fetchTasks, updateTask } from '../redux/tasksSlice';
 import Forms from '../components/forms/Forms';
-import ButtonComponent from '../components/ButtonComponent/ButtonComponent';
 import List from '../components/list/List';
 import { ToastContainer } from 'react-toastify';
 import useTaskFilter from '../hooks/useTaskFilter';
@@ -74,12 +74,18 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4">
+
+
       <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Coally Tasks App</h1>
       <div className="flex flex-col sm:flex-row sm:space-x-6 mb-8">
         <div className="bg-white p-4 rounded-lg shadow-md flex-1">
-          {loading && <p className="text-center">Loading...</p>}
           <ToastContainer />
           <ButtonFilter />
+          {loading &&
+            <div>
+              <p className="text-center">Loading...</p>
+            </div>
+          }
           <ul className="space-y-4">
             {filteredTasks?.map((task) => (
               <List key={task.id} task={task} handleCheck={handleCheck} handleEdit={setEditTaskId} deleteTaks={deleteTaks} />
