@@ -1,7 +1,6 @@
 import React from 'react';
 
 const ButtonComponent = ({ type = 'submit', onClick, children, action, className = '', disabled }) => {
-  // Determinamos el color según la acción (update o create)
   const buttonColor = action === 'update' ? 'bg-blue-500 hover:bg-blue-600' : 'bg-green-500 hover:bg-green-600';
 
   return (

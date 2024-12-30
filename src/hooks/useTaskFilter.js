@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 
 const useTaskFilter = (tasks) => {
-  const [filter, setFilter] = useState('all'); // 'all', 'completed', 'pending'
+  const [filter, setFilter] = useState('all');
 
   const filteredTasks = useMemo(() => {
     if (filter === 'completed') {
@@ -9,7 +9,7 @@ const useTaskFilter = (tasks) => {
     } else if (filter === 'pending') {
       return tasks.filter(task => !task.completed);
     }
-    return tasks; // Por defecto, muestra todas las tareas
+    return tasks;
   }, [tasks, filter]);
 
   return { filteredTasks, filter, setFilter };

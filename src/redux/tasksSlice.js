@@ -1,8 +1,6 @@
-// src/redux/tasksSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { showSnackbar } from '../services/snackbarService';
 
-// Fetch Tasks (Read)
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
   async ({ url, method = 'GET', params = {}, token = null, message = "" }, { rejectWithValue }) => {
@@ -27,16 +25,16 @@ export const fetchTasks = createAsyncThunk(
       }
 
       const result = await response.json();
-      showSnackbar(message || 'Success, The tasks were fetched', 'success'); // Mostrar Snackbar después de éxito
+      showSnackbar(message || 'Success, The tasks were fetched', 'success'); 
 
-      return result; // Este será el payload de la acción
+      return result;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Create Task
+
 export const createTask = createAsyncThunk(
   'tasks/createTask',
   async ({ url, body, token = null, message = "" }, { rejectWithValue }) => {
@@ -59,14 +57,13 @@ export const createTask = createAsyncThunk(
       const result = await response.json();
       showSnackbar(message || 'Task created successfully', 'success');
 
-      return result; // Retorna la nueva tarea creada
+      return result;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Update Task
 export const updateTask = createAsyncThunk(
   'tasks/updateTask',
   async ({ url, id, data, token = null, message = "" }, { rejectWithValue }) => {
@@ -89,14 +86,14 @@ export const updateTask = createAsyncThunk(
       const result = await response.json();
       showSnackbar(message || 'Task updated successfully', 'success');
 
-      return result; // Retorna la tarea actualizada
+      return result; 
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Delete Task
+
 export const deleteTask = createAsyncThunk(
   'tasks/deleteTask',
   async ({ url, id, token = null, message = "" }, { rejectWithValue }) => {
@@ -116,7 +113,7 @@ export const deleteTask = createAsyncThunk(
       }
       showSnackbar(message || 'Task deleted successfully', 'success');
 
-      return id; // Retorna el ID de la tarea eliminada
+      return id; 
 
     } catch (error) {
       return rejectWithValue(error.message);
@@ -134,7 +131,7 @@ const tasksSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch Tasks
+      
       .addCase(fetchTasks.pending, (state) => {
         state.loading = true;
       })
@@ -147,7 +144,7 @@ const tasksSlice = createSlice({
         state.error = action.payload || action.error.message;
       })
 
-      // Create Task
+      
       .addCase(createTask.pending, (state) => {
         state.loading = true;
       })
@@ -160,7 +157,7 @@ const tasksSlice = createSlice({
         state.error = action.payload || action.error.message;
       })
 
-      // Update Task
+      
       .addCase(updateTask.pending, (state) => {
         state.loading = true;
       })
@@ -176,7 +173,7 @@ const tasksSlice = createSlice({
         state.error = action.payload || action.error.message;
       })
 
-      // Delete Task
+      
       .addCase(deleteTask.pending, (state) => {
         state.loading = true;
       })

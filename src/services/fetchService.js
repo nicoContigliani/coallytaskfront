@@ -1,12 +1,9 @@
-// fetchService.js
-
 const fetchService = async ({ url, method = 'GET', params = {}, body = null, token = null }) => {
   const headers = {
     'Content-Type': 'application/json',
     ...(token && { Authorization: `Bearer ${token}` }),
   };
-
-  // Add query parameters
+ 
   const urlWithParams = new URL(url);
   Object.keys(params).forEach((key) =>
     urlWithParams.searchParams.append(key, params[key])
