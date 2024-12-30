@@ -38,7 +38,7 @@ const Login = () => {
       const data = await response.json();
 
       if (data?.token) {
-        dispatch(login({ token: data.token, user: data.user })); // Despacha login
+        dispatch(login({ token: data.token, user: data.user }));
         navigate('/home');
       } else {
         alert('No se pudo obtener el token. Verifica el servidor.');

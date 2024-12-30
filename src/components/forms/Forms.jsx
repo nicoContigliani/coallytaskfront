@@ -43,7 +43,7 @@ const Forms = ({ taskId,setEditTaskId }) => {
       setValue('description', taskToEdit.description);
       setValue('completed', taskToEdit.completed);
     } else {
-      reset(); // Clear form when there's no task to edit
+      reset(); 
     }
   }, [taskToEdit, setValue, reset]);
 

@@ -6,26 +6,27 @@ import ButtonComponent from '../components/ButtonComponent/ButtonComponent';
 import List from '../components/list/List';
 import { ToastContainer } from 'react-toastify';
 import useTaskFilter from '../hooks/useTaskFilter';
-import { getToken, removeToken } from '../services/tokenService';
+import { getToken } from '../services/tokenService';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../redux/authSlice';
+import ButtonFilter from '../components/ButtonFilter/ButtonFilter';
 
 const Home = () => {
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL_LOCAL || import.meta.env.VITE_API_URL;
   const token = getToken();
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { tasks, loading, error } = useSelector((state) => state?.tasks);
+  const { tasks, loading } = useSelector((state) => state?.tasks);
   const [editTaskId, setEditTaskId] = useState(null);
 
   const fetchTasksData = useCallback(() => {
     dispatch(fetchTasks({
       url: `${apiUrl}/api/tasks`,
       method: 'GET',
-      token: getToken(),
+      token,
     }));
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   useEffect(() => {
     fetchTasksData();
@@ -35,30 +36,36 @@ const Home = () => {
     dispatch(deleteTask({
       url: `${apiUrl}/api/tasks`,
       method: 'DELETE',
-      id: id,
-      token: getToken(),
+      id,
+      token,
     }));
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   const { filteredTasks, filter, setFilter } = useTaskFilter(tasks);
 
   const handleCheck = useCallback((id) => {
     const task = tasks.find((task) => task.id === id);
-
     if (task) {
       const updatedStatus = !task.completed;
       dispatch(updateTask({
         url: `${apiUrl}/api/tasks/${id}`,
-        id: id,
+        id,
         data: { completed: updatedStatus },
-        token: getToken(),
+        token,
       }));
     }
-  }, [dispatch, tasks]);
+  }, [dispatch, tasks, token]);
 
-  const handleEdit = useCallback((id) => {
-    setEditTaskId(id);
-  }, []);
+  const fetchTasksDataTodo = useCallback((data) => {
+    const url = typeof data === "boolean"
+      ? `${apiUrl}/api/tasks/filter?completed=${data}`
+      : `${apiUrl}/api/tasks`;
+    dispatch(fetchTasks({
+      url,
+      method: 'GET',
+      token,
+    }));
+  }, [dispatch, apiUrl, token]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -71,40 +78,11 @@ const Home = () => {
       <div className="flex flex-col sm:flex-row sm:space-x-6 mb-8">
         <div className="bg-white p-4 rounded-lg shadow-md flex-1">
           {loading && <p className="text-center">Loading...</p>}
-          {error && <p className="text-center text-#ff00004d-500">Error: {error}</p>}
           <ToastContainer />
-          <div className="filter-buttons flex gap-4 justify-center my-4">
-            <ButtonComponent
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 shadow-sm ${filter === 'all'
-                ? 'bg-blue-500 text-white shadow-md hover:bg-blue-600'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-            >
-              All
-            </ButtonComponent>
-            <ButtonComponent
-              onClick={() => setFilter('completed')}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 shadow-sm ${filter === 'completed'
-                ? 'bg-green-500 text-white shadow-md hover:bg-green-600'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-            >
-              Completed
-            </ButtonComponent>
-            <ButtonComponent
-              onClick={() => setFilter('pending')}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 shadow-sm ${filter === 'pending'
-                ? 'bg-yellow-500 text-white shadow-md hover:bg-yellow-600'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-            >
-              Pending
-            </ButtonComponent>
-          </div>
+          <ButtonFilter />
           <ul className="space-y-4">
-            {filteredTasks && filteredTasks.map((task) => (
-              task && <List key={task.id} task={task} handleCheck={handleCheck} handleEdit={handleEdit} deleteTaks={deleteTaks} />
+            {filteredTasks?.map((task) => (
+              <List key={task.id} task={task} handleCheck={handleCheck} handleEdit={setEditTaskId} deleteTaks={deleteTaks} />
             ))}
           </ul>
         </div>
@@ -115,7 +93,7 @@ const Home = () => {
       <div className="flex justify-end mt-4">
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-all duration-300"
+          className="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600"
         >
           Logout
         </button>
